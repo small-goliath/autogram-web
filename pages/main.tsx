@@ -37,6 +37,7 @@ const Home: React.FC = () => {
   return (
     <div className="container">
       <h1>인스타그램 계정 등록</h1>
+      <a href='https://instagram.com/doto.ri_' >⚙️ 문의는 DM 주세요.</a>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Username</label>
