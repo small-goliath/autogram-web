@@ -35,29 +35,31 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>인스타그램 계정 등록</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username:</label>
+        <div className="form-group">
+          <label>Username</label>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            autoComplete="username"
           />
         </div>
-        <div>
-          <label>Password:</label>
+        <div className="form-group">
+          <label>Password <span className="desc">패스워드는 일회용 로그인을 위함이며 당 서비스에서 저장하지 않습니다.</span></label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            autoComplete="current-password"
           />
         </div>
-        <div>
-          <label>인증코드:</label>
+        <div className="form-group">
+          <label className='Bold'>인증코드</label>
           <input
             type="password"
             value={verificationCode}
@@ -65,15 +67,23 @@ const Home: React.FC = () => {
             required
           />
         </div>
-        <div>
-          인스타그램 정책상 짧은 시간에 많은 행위를 하게되면 일시적으로 피드 조회가 불가능할 수 있습니다.
-          이를 대비하여 본 서비스는 5분에 한 번씩 좋아요와 댓글을 자동화합니다.
+        <label> 🔑 인증코드 등록 방법</label>
+        <div className='verificationCodeVideo'>
+          <video controls width="100%">
+            <source src="/verification-code-video.mov" type="video/webm" />
+          </video>
+        </div>
+        <div className="form-group agreement">
           <input
             type="checkbox"
             checked={agree}
             onChange={(e) => setAgree(e.target.checked)}
+            id="agree"
           />
-          <label>동의합니다.</label>
+          <label htmlFor="agree">
+            인스타그램 정책상 짧은 시간에 많은 행위를 하게되면 일시적으로 피드 조회가 불가능할 수 있습니다.
+            이를 대비하여 본 서비스는 n분에 한 번씩 좋아요와 댓글을 자동화합니다.<br />동의 하십니까?
+          </label>
         </div>
         <button type="submit" disabled={!agree}>Submit</button>
       </form>

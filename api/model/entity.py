@@ -9,6 +9,6 @@ class InstagramAccount(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     username = Column(String(32), unique=True, index=True)
-    password = Column(String(32), nullable=False)
+    # password = Column(String(32), nullable=False)
     enabled = Column(Boolean, default=False, nullable=False)
     session = Column(Text, nullable=False)
