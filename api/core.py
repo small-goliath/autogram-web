@@ -22,7 +22,7 @@ def create_account(db: Session, account: AccountCreate):
     
     with open(insta.session_file, 'r', encoding='utf-8') as f:
         content = f.read()
-    new_account = InstagramAccount(username=account.username, password=account.password, session=content)
+    new_account = InstagramAccount(username=account.username, session=content)
 
     db.add(new_account)
     db.commit()
