@@ -27,9 +27,9 @@ const Home: React.FC = () => {
         return;
       }
 
-      alert(`계정 추가 성공: ${response.data.id}`);
+      alert(`계정이 추가되었습니다: ${response.data.username}`);
     } catch (error) {
-      alert(`계정 추가 실패`);
+      alert(`계정이 추가되지 않았습니다.`);
       console.error('인스타 로그인 실패:', error);
     }
   };
