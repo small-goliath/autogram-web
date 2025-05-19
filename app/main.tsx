@@ -1,7 +1,9 @@
+"use client";
+
 import axios from 'axios';
 import React, { useState } from 'react';
 
-const Home: React.FC = () => {
+export function Home() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
@@ -91,5 +93,3 @@ const Home: React.FC = () => {
     </div>
   );
 };
-
-export default Home;
