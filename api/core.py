@@ -10,17 +10,16 @@ def get_account_by_username(db: Session, username: str):
     return db.query(InstagramAccount).filter(InstagramAccount.username == username).first()
 
 def create_account(db: Session, account: AccountCreate):
+    db_account = get_account_by_username(db, account.username)
+    if db_account:
+        raise HTTPException(status_code=400, detail="이미 등록되어 있습니다.")
+    
     try:
         insta = Insta(account)
         session = insta.login()
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail="로그인할 수 없습니다.")
-    
-    db_account = get_account_by_username(db, account.username)
-    if db_account:
-        raise HTTPException(status_code=400, detail="이미 등록되어 있습니다.")
-    
 
     new_account = InstagramAccount(username=account.username, session=json.dumps(session))
 
