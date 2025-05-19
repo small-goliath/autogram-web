@@ -6,7 +6,7 @@ from api.model.payload import AccountCreate
 
 from sqlalchemy.orm import Session
 
-app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
+app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
 # CORS 설정
 app.add_middleware(
@@ -24,7 +24,7 @@ def get_db():
     finally:
         db.close()
         
-@app.post("/api/py/accounts/instagram")
+@app.post("/api/accounts/instagram")
 async def create_user_account(account: AccountCreate, db: Session = Depends(get_db)):
     try:
         new_account = create_account(db, account)
