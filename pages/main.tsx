@@ -11,7 +11,7 @@ const Home: React.FC = () => {
     try {
       event.preventDefault();
       console.log(username)
-      const response = await axios.post('http://localhost:8000/api/accounts/instagram', {
+      const response = await axios.post('/api/accounts/instagram', {
         username: username,
         password: password,
         verification_code: verificationCode
