@@ -1,6 +1,6 @@
 .vscode/
 session.json
-insta_session/
+insta_session/*.json
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 __pycache__
