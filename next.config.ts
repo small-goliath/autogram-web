@@ -1,7 +1,6 @@
-import { NextConfig } from 'next';
+/** @type {import('next').NextConfig} */
 
-const nextConfig: NextConfig = {
-  reactStrictMode: true,
+const nextConfig = {
   rewrites: async () => {
     return [
       {

@@ -1,7 +1,10 @@
 {
-    "functions": {
-      "api/**": {
-        "excludeFiles": "{.next,.git,node_modules}/**"
-      }
+  "builds": [{ "src": "app.py", "use": "@vercel/python" }],
+  "routes": [{ "src": "/(.*)", "dest": "app.py" }],
+  
+  "functions": {
+    "api/**": {
+      "excludeFiles": "{.next,.git,node_modules}/**"
     }
   }
+}
