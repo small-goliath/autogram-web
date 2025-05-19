@@ -1,8 +1,7 @@
 import { Analytics } from '@vercel/analytics/react';
 import "./app.css";
-import { Home } from "./main";
 
-export default function RootLayout() {
+export default function RootLayout({children}: {children: React.ReactNode;}) {
   const userName = `${process.env.NEXT_PUBLIC_PROFILE_NAME}`;
   const webUri = `${process.env.NEXT_PUBLIC_WEB_URI}`;
   const webDescription = `${process.env.NEXT_PUBLIC_WEB_DESCRIPTION}`;
@@ -19,7 +18,7 @@ export default function RootLayout() {
 
       <body>
         <Analytics />
-        <Home />
+        {children}
       </body>
     </html>
   );

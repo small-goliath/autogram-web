@@ -3,7 +3,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 
-export function Home() {
+export function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
