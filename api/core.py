@@ -1,3 +1,4 @@
+import json
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
@@ -11,7 +12,7 @@ def get_account_by_username(db: Session, username: str):
 def create_account(db: Session, account: AccountCreate):
     try:
         insta = Insta(account)
-        insta.login()
+        session = insta.login()
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail="로그인할 수 없습니다.")
@@ -20,9 +21,8 @@ def create_account(db: Session, account: AccountCreate):
     if db_account:
         raise HTTPException(status_code=400, detail="이미 등록되어 있습니다.")
     
-    with open(insta.session_file, 'r', encoding='utf-8') as f:
-        content = f.read()
-    new_account = InstagramAccount(username=account.username, session=content)
+
+    new_account = InstagramAccount(username=account.username, session=json.dumps(session))
 
     db.add(new_account)
     db.commit()
