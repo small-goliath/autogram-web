@@ -117,7 +117,7 @@ export function Register() {
         <label> 🔑 인증코드 등록 방법</label>
         <div className="verificationCodeVideo">
           <video controls width="100%">
-            <source src="/verification-code-video.mov" type="video/webm" />
+            <source src="/verification-code-video.mp4" type="video/mp4" />
           </video>
         </div>
         <div className="form-group">
