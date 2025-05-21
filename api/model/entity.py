@@ -9,6 +9,12 @@ class InstagramAccount(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     username = Column(String(32), unique=True, index=True)
-    # password = Column(String(32), nullable=False)
     enabled = Column(Boolean, default=False, nullable=False)
+    group_id = Column(Integer, index=True)
     session = Column(Text, nullable=False)
+
+class InstagramGroup(Base):
+    __tablename__ = "instagram_group"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    type = Column(String(32))

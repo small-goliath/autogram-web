@@ -124,3 +124,19 @@ button[disabled] {
     font-size: 1rem;
   }
 }
+
+select {
+  padding: 10px 12px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 6px;
+  background: #f9fafb;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.18s;
+  appearance: none; /* Removes default arrow */
+}
+
+select:focus {
+  border-color: #5a67d8;
+  background: #fff;
+}

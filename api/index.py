@@ -1,6 +1,7 @@
+import json
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from api.core import create_account
+from api.core import create_account, create_group, get_groups
 from api.database import SessionLocal
 from api.model.payload import AccountCreate
 
@@ -29,6 +30,22 @@ async def create_user_account(account: AccountCreate, db: Session = Depends(get_
     try:
         new_account = create_account(db, account)
     except HTTPException as e:
-        print(e)
         return {"failed": e.detail}
     return {"id": new_account.id, "username": new_account.username}
+
+@app.get("/api/groups")
+async def searcg_groups(db: Session = Depends(get_db)):
+    try:
+        instagramGroups = get_groups(db)
+    except HTTPException as e:
+        return {"failed": e.detail}
+    return [{"id": instagramGroup.id, "type": instagramGroup.type} for instagramGroup in instagramGroups]
+
+@app.post("/api/admin/groups")
+async def create_type(type: str, db: Session = Depends(get_db)):
+    print(type)
+    try:
+        instagramGroup = create_group(db, type)
+    except HTTPException as e:
+        return {"failed": e.detail}
+    return {"type": instagramGroup.type}

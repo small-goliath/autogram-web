@@ -1,15 +1,19 @@
 import json
+from typing import List
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
 from api.insta import Insta
-from api.model.entity import InstagramAccount
+from api.model.entity import InstagramAccount, InstagramGroup
 from api.model.payload import AccountCreate
 
 def get_account_by_username(db: Session, username: str):
     return db.query(InstagramAccount).filter(InstagramAccount.username == username).first()
 
-def create_account(db: Session, account: AccountCreate):
+def get_groups(db: Session) -> List[InstagramGroup]:
+    return db.query(InstagramGroup).all()
+
+def create_account(db: Session, account: AccountCreate) -> InstagramAccount:
     db_account = get_account_by_username(db, account.username)
     if db_account:
         raise HTTPException(status_code=400, detail="이미 등록되어 있습니다.")
@@ -18,13 +22,20 @@ def create_account(db: Session, account: AccountCreate):
         insta = Insta(account)
         session = insta.login()
     except Exception as e:
-        print(e)
         raise HTTPException(status_code=400, detail="로그인할 수 없습니다.")
 
-    new_account = InstagramAccount(username=account.username, session=json.dumps(session))
+    new_account = InstagramAccount(username=account.username, session=json.dumps(session), group_id=account.group_id)
 
     db.add(new_account)
     db.commit()
     db.refresh(new_account)
     
     return new_account
+
+def create_group(db: Session, type: str) -> InstagramGroup:
+    instagramGroup = InstagramGroup(type=type)
+    db.add(instagramGroup)
+    db.commit()
+    db.refresh(instagramGroup)
+
+    return instagramGroup
