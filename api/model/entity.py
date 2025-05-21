@@ -18,3 +18,9 @@ class InstagramGroup(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     type = Column(String(32))
+
+class Consumer(Base):
+    __tablename__ = "consumer"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(32))

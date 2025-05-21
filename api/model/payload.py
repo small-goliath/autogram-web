@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic.main import BaseModel
 
 class AccountCreate(BaseModel):
@@ -5,3 +6,8 @@ class AccountCreate(BaseModel):
     password: str
     verification_code: str
     group_id: int
+
+class AdminCommon(BaseModel):
+    type: Optional[str]
+    created_consumer: Optional[str]
+    removed_consumer: Optional[str]

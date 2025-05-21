@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
 from api.insta import Insta
-from api.model.entity import InstagramAccount, InstagramGroup
+from api.model.entity import Consumer, InstagramAccount, InstagramGroup
 from api.model.payload import AccountCreate
 
 def get_account_by_username(db: Session, username: str):
@@ -39,3 +39,20 @@ def create_group(db: Session, type: str) -> InstagramGroup:
     db.refresh(instagramGroup)
 
     return instagramGroup
+
+def create_consumer(db: Session, username: str) -> Consumer:
+    consumer = Consumer(username=username)
+    db.add(consumer)
+    db.commit()
+    db.refresh(consumer)
+
+    return consumer
+
+def remove_consumer(db: Session, username: str) -> Consumer:
+    consumer = db.query(Consumer).filter(Consumer.username == username).first()
+    
+    if consumer:
+        db.delete(consumer)
+        db.commit()
+        return consumer
+    return None

@@ -1,9 +1,9 @@
 import json
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from api.core import create_account, create_group, get_groups
+from api.core import create_account, create_group, get_groups, create_consumer, remove_consumer
 from api.database import SessionLocal
-from api.model.payload import AccountCreate
+from api.model.payload import AccountCreate, AdminCommon
 
 from sqlalchemy.orm import Session
 
@@ -41,11 +41,15 @@ async def searcg_groups(db: Session = Depends(get_db)):
         return {"failed": e.detail}
     return [{"id": instagramGroup.id, "type": instagramGroup.type} for instagramGroup in instagramGroups]
 
-@app.post("/api/admin/groups")
-async def create_type(type: str, db: Session = Depends(get_db)):
-    print(type)
+@app.post("/api/admin/common")
+async def create_type(adminCommon: AdminCommon, db: Session = Depends(get_db)):
     try:
-        instagramGroup = create_group(db, type)
+        if adminCommon.type:
+            create_group(db, adminCommon.type)
+        if adminCommon.created_consumer:
+            create_consumer(db, adminCommon.created_consumer)
+        if adminCommon.removed_consumer:
+            remove_consumer(db, adminCommon.removed_consumer)
     except HTTPException as e:
         return {"failed": e.detail}
-    return {"type": instagramGroup.type}
+    return {"status": "ok"}
