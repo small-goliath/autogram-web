@@ -3,6 +3,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
+interface Group {
+  id: string;
+  type: string;
+}
+
 export function Register() {
   const [formData, setFormData] = useState({
     username: '',
@@ -10,7 +15,7 @@ export function Register() {
     verificationCode: '',
     groupId: '',
   });
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState<Group[]>([]);
   const [agree, setAgree] = useState(false);
   const [error, setError] = useState('');
 
