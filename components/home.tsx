@@ -68,7 +68,7 @@ export function Register() {
         return;
       }
 
-      alert(`계정이 추가되었습니다: ${response.data.username}`);
+      alert("계정이 추가되었습니다.");
     } catch (error) {
       alert('계정이 추가되지 않았습니다.');
       console.error('인스타 로그인 실패:', error);
