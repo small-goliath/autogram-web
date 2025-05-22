@@ -1,5 +1,4 @@
 import json
-import locale
 from typing import Any, Dict, List
 from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException
@@ -41,18 +40,6 @@ def create_consumer(username: str):
         consumer = Consumer(username=username)
         db.add(consumer)
 
-        locale.setlocale(locale.LC_TIME, 'ko_KR.UTF-8')
-        KST = timezone(timedelta(hours=9))
-        today = datetime.now(KST)
-        
-        payment = Payment(username=username, year_month=today.strftime("%Y-%m"))
-        db.add(payment)
-
-        pass
-
-def create_payment(username: str):
-    with transactional_session() as db:
-        locale.setlocale(locale.LC_TIME, 'ko_KR.UTF-8')
         KST = timezone(timedelta(hours=9))
         today = datetime.now(KST)
         

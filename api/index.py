@@ -31,7 +31,7 @@ async def search_groups():
     return instagramGroups
 
 @app.post("/api/admin/common")
-async def create_type(adminCommon: AdminCommon):
+async def setting(adminCommon: AdminCommon):
     try:
         if adminCommon.type:
             create_group(adminCommon.type)
