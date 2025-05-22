@@ -1,58 +1,78 @@
 import json
+import locale
 from typing import List
 from sqlalchemy.orm import Session
+from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException
 
+from api.database import read_only_session, transactional_session
 from api.insta import Insta
-from api.model.entity import Consumer, InstagramAccount, InstagramGroup
+from api.model.entity import Consumer, InstagramAccount, InstagramGroup, Payment
 from api.model.payload import AccountCreate
 
-def get_account_by_username(db: Session, username: str):
-    return db.query(InstagramAccount).filter(InstagramAccount.username == username).first()
+def get_account_by_username(username: str):
+    with read_only_session() as db:
+        return db.query(InstagramAccount).filter(InstagramAccount.username == username).first()
 
 def get_groups(db: Session) -> List[InstagramGroup]:
-    return db.query(InstagramGroup).all()
+    with read_only_session() as db:
+        return db.query(InstagramGroup).all()
 
-def create_account(db: Session, account: AccountCreate) -> InstagramAccount:
-    db_account = get_account_by_username(db, account.username)
-    if db_account:
-        raise HTTPException(status_code=400, detail="이미 등록되어 있습니다.")
-    
-    try:
-        insta = Insta(account)
-        session = insta.login()
-    except Exception as e:
-        raise HTTPException(status_code=400, detail="로그인할 수 없습니다.")
+def create_account(account: AccountCreate) -> InstagramAccount:
+    with transactional_session() as db:
+        db_account = get_account_by_username(db, account.username)
+        if db_account:
+            raise HTTPException(status_code=400, detail="이미 등록되어 있습니다.")
+        
+        try:
+            insta = Insta(account)
+            session = insta.login()
+        except Exception as e:
+            raise HTTPException(status_code=400, detail="로그인할 수 없습니다.")
 
-    new_account = InstagramAccount(username=account.username, session=json.dumps(session), group_id=account.group_id)
+        new_account = InstagramAccount(username=account.username, session=json.dumps(session), group_id=account.group_id)
 
-    db.add(new_account)
-    db.commit()
-    db.refresh(new_account)
-    
-    return new_account
+        db.add(new_account)
+        
+        return new_account
 
-def create_group(db: Session, type: str) -> InstagramGroup:
-    instagramGroup = InstagramGroup(type=type)
-    db.add(instagramGroup)
-    db.commit()
-    db.refresh(instagramGroup)
+def create_group(type: str) -> InstagramGroup:
+    with transactional_session() as db:
+        instagramGroup = InstagramGroup(type=type)
+        db.add(instagramGroup)
 
-    return instagramGroup
+        return instagramGroup
 
-def create_consumer(db: Session, username: str) -> Consumer:
-    consumer = Consumer(username=username)
-    db.add(consumer)
-    db.commit()
-    db.refresh(consumer)
+def create_consumer(username: str) -> Consumer:
+    with transactional_session() as db:
+        consumer = Consumer(username=username)
+        db.add(consumer)
 
-    return consumer
+        locale.setlocale(locale.LC_TIME, 'ko_KR.UTF-8')
+        KST = timezone(timedelta(hours=9))
+        today = datetime.now(KST)
+        
+        payment = Payment(username=username, year_month=today.strftime("%Y-%m"))
+        db.add(payment)
 
-def remove_consumer(db: Session, username: str) -> Consumer:
-    consumer = db.query(Consumer).filter(Consumer.username == username).first()
-    
-    if consumer:
-        db.delete(consumer)
-        db.commit()
         return consumer
-    return None
+
+def create_payment(username: str) -> Consumer:
+    with transactional_session() as db:
+        locale.setlocale(locale.LC_TIME, 'ko_KR.UTF-8')
+        KST = timezone(timedelta(hours=9))
+        today = datetime.now(KST)
+        
+        payment = Payment(username=username, year_month=today.strftime("%Y-%m"))
+        db.add(payment)
+
+        return payment
+
+def remove_consumer(username: str) -> Consumer:
+    with transactional_session() as db:
+        consumer = db.query(Consumer).filter(Consumer.username == username).first()
+        
+        if consumer:
+            db.delete(consumer)
+            return consumer
+        return None
