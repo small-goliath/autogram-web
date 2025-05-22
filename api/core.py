@@ -6,7 +6,7 @@ from fastapi import HTTPException
 from api.database import read_only_session, transactional_session
 from api.insta import Insta
 from api.model.entity import Consumer, InstagramGroup, Payment, Producer
-from api.model.payload import ProducerCreate
+from api.model.payload import ConsumerCreate, ProducerCreate
 
 def get_groups() -> List[Dict[str, Any]]:
     with read_only_session() as db:
@@ -35,15 +35,15 @@ def create_group(type: str):
 
         pass
 
-def create_consumer(username: str):
+def create_consumer(consumerCreate: ConsumerCreate):
     with transactional_session() as db:
-        consumer = Consumer(username=username)
+        consumer = Consumer(username=consumerCreate.username, group_id=consumerCreate.group_id)
         db.add(consumer)
 
         KST = timezone(timedelta(hours=9))
         today = datetime.now(KST)
         
-        payment = Payment(username=username, year_month=today.strftime("%Y-%m"))
+        payment = Payment(username=consumerCreate.username, year_month=today.strftime("%Y-%m"))
         db.add(payment)
 
         pass

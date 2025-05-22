@@ -22,6 +22,7 @@ class Consumer(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(32))
+    group_id = Column(Integer, index=True)
 
 class Payment(Base):
     __tablename__ = "payment"

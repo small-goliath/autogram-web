@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from api.core import create_producer, create_group, get_groups, create_consumer, remove_consumer
-from api.model.payload import ProducerCreate, AdminCommon
+from api.model.payload import ConsumerCreate, GroupCreate, ProducerCreate
 
 app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
@@ -30,15 +30,26 @@ async def search_groups():
         return {"status": e.detail}
     return instagramGroups
 
-@app.post("/api/admin/common")
-async def setting(adminCommon: AdminCommon):
+@app.post("/api/admin/groups")
+async def setting(groupCreate: GroupCreate):
     try:
-        if adminCommon.type:
-            create_group(adminCommon.type)
-        if adminCommon.created_consumer:
-            create_consumer(adminCommon.created_consumer)
-        if adminCommon.removed_consumer:
-            remove_consumer(adminCommon.removed_consumer)
+        create_group(groupCreate.type)
+    except HTTPException as e:
+        return {"status": e.detail}
+    return {"status": "ok"}
+
+@app.post("/api/admin/consumers")
+async def setting(consumerCreate: ConsumerCreate):
+    try:
+        create_consumer(consumerCreate)
+    except HTTPException as e:
+        return {"status": e.detail}
+    return {"status": "ok"}
+
+@app.delete("/api/admin/consumers")
+async def setting(username: str):
+    try:
+        remove_consumer(username)
     except HTTPException as e:
         return {"status": e.detail}
     return {"status": "ok"}

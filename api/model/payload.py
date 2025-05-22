@@ -1,4 +1,3 @@
-from typing import Optional
 from pydantic.main import BaseModel
 
 class ProducerCreate(BaseModel):
@@ -7,7 +6,9 @@ class ProducerCreate(BaseModel):
     verification_code: str
     group_id: int
 
-class AdminCommon(BaseModel):
-    type: Optional[str]
-    created_consumer: Optional[str]
-    removed_consumer: Optional[str]
+class GroupCreate(BaseModel):
+    type: str
+
+class ConsumerCreate(BaseModel):
+    username: str
+    group_id: int

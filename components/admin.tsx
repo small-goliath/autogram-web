@@ -1,21 +1,50 @@
 "use client";
 
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+interface Group {
+  id: string;
+  type: string;
+}
+
 
 export function Register() {
+  const [createConsumerFormData, setCreateConsumerFormData] = useState({
+    username: '',
+    groupId: '',
+  });
   const [type, setType] = useState('');
-  const [createdConsumer, setCreatedConsumer] = useState('');
   const [remvedConsumer, setRemovedConsumer] = useState('');
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [error, setError] = useState('');
 
-  const handleCommonSubmit = async (event: React.FormEvent) => {
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const response = await fetch('/api/groups');
+        const result = await response.json();
+        console.log(result)
+        setGroups(result);
+      } catch {
+        setError('Failed to fetch groups');
+      }
+    };
+
+    fetchGroups();
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setCreateConsumerFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleGroupSubmit = async (event: React.FormEvent) => {
     try {
       event.preventDefault();
-      const response = await axios.post('/api/admin/common',
+      const response = await axios.post('/api/admin/groups',
         {
-          type: type,
-          created_consumer: createdConsumer,
-          removed_consumer: remvedConsumer
+          type: type
         },
         {
           headers: {
@@ -31,10 +60,45 @@ export function Register() {
     }
   };
 
+  const handleConsumerCreateSubmit = async (event: React.FormEvent) => {
+    try {
+      event.preventDefault();
+      const response = await axios.post('/api/admin/consumers',
+        {
+          username: createConsumerFormData.username,
+          group_id: createConsumerFormData.groupId
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+      console.log(response.data.status);
+      alert("설정 되었습니다.");
+    } catch (error) {
+      alert("설정 되지 않았습니다.");
+      console.error('설정 실패:', error);
+    }
+  };
+
+  const handleConsumerRemoveSubmit = async (event: React.FormEvent) => {
+    try {
+      event.preventDefault();
+      const response = await axios.delete('/api/admin/consumers?username=' + remvedConsumer);
+
+      console.log(response.data.status);
+      alert("설정 되었습니다.");
+    } catch (error) {
+      alert("설정 되지 않았습니다.");
+      console.error('설정 실패:', error);
+    }
+  };
+
   return (
     <div className="container">
       <h1>관리자 목록</h1>
-      <form onSubmit={handleCommonSubmit}>
+      <form onSubmit={handleGroupSubmit}>
         <div className="form-group">
           <label>그룹 등록</label>
           <input
@@ -44,15 +108,37 @@ export function Register() {
             placeholder="그룹 명"
           />
         </div>
+        <button type="submit">설정하기</button>
+      </form>
+
+      <form onSubmit={handleConsumerCreateSubmit}>
         <div className="form-group">
           <label>받는 계정 등록</label>
           <input
+            name="username"
             type="text"
-            value={createdConsumer}
-            onChange={(e) => setCreatedConsumer(e.target.value)}
+            value={createConsumerFormData.username}
+            onChange={handleChange}
             placeholder="받는 사람의 인스타그램 계정"
           />
+          <select
+            name="groupId"
+            value={createConsumerFormData.groupId}
+            onChange={handleChange}
+            required
+          >
+            <option value="">그룹을 선택하세요</option>
+            {groups.map((group, index) => (
+              <option key={index} value={group.id}>
+                {group.type}
+              </option>
+            ))}
+          </select>
         </div>
+        <button type="submit">설정하기</button>
+      </form>
+
+      <form onSubmit={handleConsumerRemoveSubmit}>
         <div className="form-group">
           <label>받는 계정 삭제</label>
           <input
