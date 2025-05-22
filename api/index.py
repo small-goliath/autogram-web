@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from api.core import create_account, create_group, get_groups, create_consumer, remove_consumer
-from api.model.payload import AccountCreate, AdminCommon
+from api.core import create_producer, create_group, get_groups, create_consumer, remove_consumer
+from api.model.payload import ProducerCreate, AdminCommon
 
 app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
@@ -15,12 +15,12 @@ app.add_middleware(
 )
         
 @app.post("/api/accounts/instagram")
-async def create_user_account(account: AccountCreate):
+async def create_user_account(account: ProducerCreate):
     try:
-        new_account = create_account(account)
+        producer = create_producer(account)
     except HTTPException as e:
         return {"failed": e.detail}
-    return {"id": new_account.id, "username": new_account.username}
+    return {"id": producer.id, "username": producer.username}
 
 @app.get("/api/groups")
 async def search_groups():

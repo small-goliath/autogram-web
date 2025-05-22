@@ -1,10 +1,10 @@
 import json
 from typing import Dict
 from instagrapi import Client
-from api.model.payload import AccountCreate
+from api.model.payload import ProducerCreate
 
 class Insta():
-    def __init__(self, account: AccountCreate):
+    def __init__(self, account: ProducerCreate):
         self.client = Client()
         self.username = account.username
         self.password = account.password

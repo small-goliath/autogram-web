@@ -7,18 +7,18 @@ from fastapi import HTTPException
 
 from api.database import read_only_session, transactional_session
 from api.insta import Insta
-from api.model.entity import Consumer, InstagramAccount, InstagramGroup, Payment
-from api.model.payload import AccountCreate
+from api.model.entity import Consumer, InstagramGroup, Payment, Producer
+from api.model.payload import ProducerCreate
 
 def get_account_by_username(username: str):
     with read_only_session() as db:
-        return db.query(InstagramAccount).filter(InstagramAccount.username == username).first()
+        return db.query(Producer).filter(Producer.username == username).first()
 
 def get_groups(db: Session) -> List[InstagramGroup]:
     with read_only_session() as db:
         return db.query(InstagramGroup).all()
 
-def create_account(account: AccountCreate) -> InstagramAccount:
+def create_producer(account: ProducerCreate) -> Producer:
     with transactional_session() as db:
         db_account = get_account_by_username(db, account.username)
         if db_account:
@@ -30,7 +30,7 @@ def create_account(account: AccountCreate) -> InstagramAccount:
         except Exception as e:
             raise HTTPException(status_code=400, detail="로그인할 수 없습니다.")
 
-        new_account = InstagramAccount(username=account.username, session=json.dumps(session), group_id=account.group_id)
+        new_account = Producer(username=account.username, session=json.dumps(session), group_id=account.group_id)
 
         db.add(new_account)
         

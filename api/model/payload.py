@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic.main import BaseModel
 
-class AccountCreate(BaseModel):
+class ProducerCreate(BaseModel):
     username: str
     password: str
     verification_code: str
