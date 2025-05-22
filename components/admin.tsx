@@ -23,11 +23,7 @@ export function Register() {
           },
         });
 
-      if (response.data.failed) {
-        alert(response.data.failed);
-        return;
-      }
-
+      console.log(response.data.status);
       alert("설정 되었습니다.");
     } catch (error) {
       alert("설정 되지 않았습니다.");

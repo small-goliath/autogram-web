@@ -19,7 +19,7 @@ async def create_user_account(account: ProducerCreate):
     try:
         create_producer(account)
     except HTTPException as e:
-        return {"failed": e.detail}
+        return {"status": e.detail}
     return {"status": "ok"}
 
 @app.get("/api/groups")
@@ -27,7 +27,7 @@ async def search_groups():
     try:
         instagramGroups = get_groups()
     except HTTPException as e:
-        return {"failed": e.detail}
+        return {"status": e.detail}
     return instagramGroups
 
 @app.post("/api/admin/common")
@@ -40,5 +40,5 @@ async def create_type(adminCommon: AdminCommon):
         if adminCommon.removed_consumer:
             remove_consumer(adminCommon.removed_consumer)
     except HTTPException as e:
-        return {"failed": e.detail}
+        return {"status": e.detail}
     return {"status": "ok"}

@@ -63,10 +63,7 @@ export function Register() {
         }
       );
 
-      if (response.data.failed) {
-        alert(response.data.failed);
-        return;
-      }
+      console.log(response.data.status)
 
       alert("계정이 추가되었습니다.");
     } catch (error) {
