@@ -1,7 +1,6 @@
 import json
 import locale
-from typing import List
-from sqlalchemy.orm import Session
+from typing import Any, Dict, List
 from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException
 
@@ -10,17 +9,14 @@ from api.insta import Insta
 from api.model.entity import Consumer, InstagramGroup, Payment, Producer
 from api.model.payload import ProducerCreate
 
-def get_account_by_username(username: str):
+def get_groups() -> List[Dict[str, Any]]:
     with read_only_session() as db:
-        return db.query(Producer).filter(Producer.username == username).first()
+        instagramGroups = db.query(InstagramGroup).all()
+        return [{"id": group.id, "type": group.type} for group in instagramGroups]
 
-def get_groups(db: Session) -> List[InstagramGroup]:
-    with read_only_session() as db:
-        return db.query(InstagramGroup).all()
-
-def create_producer(account: ProducerCreate) -> Producer:
+def create_producer(account: ProducerCreate):
     with transactional_session() as db:
-        db_account = get_account_by_username(db, account.username)
+        db_account = db.query(Producer).filter(Producer.username == account.username).first()
         if db_account:
             raise HTTPException(status_code=400, detail="이미 등록되어 있습니다.")
         
@@ -29,21 +25,18 @@ def create_producer(account: ProducerCreate) -> Producer:
             session = insta.login()
         except Exception as e:
             raise HTTPException(status_code=400, detail="로그인할 수 없습니다.")
-
         new_account = Producer(username=account.username, session=json.dumps(session), group_id=account.group_id)
-
         db.add(new_account)
-        
-        return new_account
+        pass
 
-def create_group(type: str) -> InstagramGroup:
+def create_group(type: str):
     with transactional_session() as db:
         instagramGroup = InstagramGroup(type=type)
         db.add(instagramGroup)
 
-        return instagramGroup
+        pass
 
-def create_consumer(username: str) -> Consumer:
+def create_consumer(username: str):
     with transactional_session() as db:
         consumer = Consumer(username=username)
         db.add(consumer)
@@ -55,9 +48,9 @@ def create_consumer(username: str) -> Consumer:
         payment = Payment(username=username, year_month=today.strftime("%Y-%m"))
         db.add(payment)
 
-        return consumer
+        pass
 
-def create_payment(username: str) -> Consumer:
+def create_payment(username: str):
     with transactional_session() as db:
         locale.setlocale(locale.LC_TIME, 'ko_KR.UTF-8')
         KST = timezone(timedelta(hours=9))
@@ -66,13 +59,13 @@ def create_payment(username: str) -> Consumer:
         payment = Payment(username=username, year_month=today.strftime("%Y-%m"))
         db.add(payment)
 
-        return payment
+        pass
 
-def remove_consumer(username: str) -> Consumer:
+def remove_consumer(username: str):
     with transactional_session() as db:
         consumer = db.query(Consumer).filter(Consumer.username == username).first()
         
         if consumer:
             db.delete(consumer)
-            return consumer
-        return None
+
+        pass

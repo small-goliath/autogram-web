@@ -17,10 +17,10 @@ app.add_middleware(
 @app.post("/api/accounts/instagram")
 async def create_user_account(account: ProducerCreate):
     try:
-        producer = create_producer(account)
+        create_producer(account)
     except HTTPException as e:
         return {"failed": e.detail}
-    return {"id": producer.id, "username": producer.username}
+    return {"status": "ok"}
 
 @app.get("/api/groups")
 async def search_groups():
@@ -28,7 +28,7 @@ async def search_groups():
         instagramGroups = get_groups()
     except HTTPException as e:
         return {"failed": e.detail}
-    return [{"id": instagramGroup.id, "type": instagramGroup.type} for instagramGroup in instagramGroups]
+    return instagramGroups
 
 @app.post("/api/admin/common")
 async def create_type(adminCommon: AdminCommon):

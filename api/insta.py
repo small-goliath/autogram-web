@@ -1,4 +1,3 @@
-import json
 from typing import Dict
 from instagrapi import Client
 from api.model.payload import ProducerCreate

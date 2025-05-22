@@ -24,6 +24,7 @@ export function Register() {
       try {
         const response = await fetch('/api/groups');
         const result = await response.json();
+        console.log(result)
         setGroups(result);
       } catch {
         setError('Failed to fetch groups');
