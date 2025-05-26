@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from api.core import create_producer, create_group, get_groups, create_consumer, remove_consumer, search_payments
+import api.core as core
 from api.model.payload import ConsumerCreate, GroupCreate, ProducerCreate
 
 app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
@@ -17,7 +17,7 @@ app.add_middleware(
 @app.post("/api/accounts/instagram")
 async def create_user_account(account: ProducerCreate):
     try:
-        create_producer(account)
+        core.create_producer(account)
     except HTTPException as e:
         return {"status": e.detail}
     return {"status": "ok"}
@@ -25,15 +25,25 @@ async def create_user_account(account: ProducerCreate):
 @app.get("/api/groups")
 async def search_groups():
     try:
-        instagramGroups = get_groups()
+        instagramGroups = core.get_groups()
     except HTTPException as e:
         return {"status": e.detail}
     return instagramGroups
 
+@app.get("/api/unfollowers")
+async def search_groups(username: str):
+    if username is None or username == "":
+        return []
+    try:
+        unfollowers = core.get_unfollowers(username)
+    except HTTPException as e:
+        return {"status": e.detail}
+    return unfollowers
+
 @app.post("/api/admin/groups")
 async def setting_group(groupCreate: GroupCreate):
     try:
-        create_group(groupCreate.type)
+        core.create_group(groupCreate.type)
     except HTTPException as e:
         return {"status": e.detail}
     return {"status": "ok"}
@@ -41,7 +51,7 @@ async def setting_group(groupCreate: GroupCreate):
 @app.post("/api/admin/consumers")
 async def setting_consumer(consumerCreate: ConsumerCreate):
     try:
-        create_consumer(consumerCreate)
+        core.create_consumer(consumerCreate)
     except HTTPException as e:
         return {"status": e.detail}
     return {"status": "ok"}
@@ -49,7 +59,7 @@ async def setting_consumer(consumerCreate: ConsumerCreate):
 @app.delete("/api/admin/consumers")
 async def delete_consumer(username: str):
     try:
-        remove_consumer(username)
+        core.remove_consumer(username)
     except HTTPException as e:
         return {"status": e.detail}
     return {"status": "ok"}
@@ -57,6 +67,6 @@ async def delete_consumer(username: str):
 @app.get("/api/admin/payments")
 async def search_payment(duration: str):
     try:
-        return search_payments(duration)
+        return core.search_payments(duration)
     except HTTPException as e:
         return {"status": e.detail}

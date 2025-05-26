@@ -7,7 +7,7 @@ from fastapi import HTTPException
 from api.database import read_only_session, transactional_session
 from api.insta import Insta
 from api.model.entity import Consumer, InstagramGroup, Payment, Producer
-from api.model.payload import ConsumerCreate, ProducerCreate
+from api.model.payload import ConsumerCreate, InstagramAccount, ProducerCreate
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -17,6 +17,24 @@ def get_groups() -> List[Dict[str, Any]]:
     with read_only_session() as db:
         instagramGroups = db.query(InstagramGroup).all()
         return [{"id": group.id, "type": group.type} for group in instagramGroups]
+    
+def get_unfollowers(username: str) -> List[Dict[str, Any]]:
+    admin = "_doto.ri_"
+    with read_only_session() as db:
+        admin_account = db.query(Producer).filter_by(username=admin).first()
+        instagramAccount = InstagramAccount(username=admin_account.username,
+                                            session=admin_account.session)
+        insta = Insta(instagramAccount)
+        insta.login_with_session()
+        followings = insta.search_followings(username)
+        followers = insta.search_followers(username)
+        unfollowers = set(followings.values()) - set(followers.values())
+        return [{"username": unfollower.username, "nickname": unfollower.full_name, "link": f"https://www.instagram.com/{unfollower.username}" } for unfollower in unfollowers]
+    
+def get_payments(duration: str):
+    with read_only_session() as db:
+        payments = db.query(Payment).filter(Payment.year_month == duration).all()
+        return [{"username": payment.username, "price": (payment.count * PRICE_BY_ACTION)} for payment in payments]
 
 def create_producer(account: ProducerCreate):
     with transactional_session() as db:
@@ -25,8 +43,12 @@ def create_producer(account: ProducerCreate):
             raise HTTPException(status_code=400, detail="이미 등록되어 있습니다.")
         
         try:
-            insta = Insta(account)
-            session = insta.login()
+            instagramAccount = InstagramAccount(username=account.username,
+                                                password=account.password,
+                                                verification_code=account.verification_code,
+                                                group_id=account.group_id)
+            insta = Insta(instagramAccount)
+            session = insta.login_with_password()
         except Exception as e:
             raise HTTPException(status_code=400, detail="로그인할 수 없습니다.")
         new_account = Producer(username=account.username, session=json.dumps(session), group_id=account.group_id)
@@ -61,8 +83,3 @@ def remove_consumer(username: str):
             db.delete(consumer)
 
         pass
-
-def search_payments(duration: str):
-    with read_only_session() as db:
-        payments = db.query(Payment).filter(Payment.year_month == duration).all()
-        return [{"username": payment.username, "price": (payment.count * PRICE_BY_ACTION)} for payment in payments]
