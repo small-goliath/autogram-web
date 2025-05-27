@@ -29,7 +29,10 @@ def get_unfollowers(username: str) -> List[Dict[str, Any]]:
         followings = insta.search_followings(username)
         followers = insta.search_followers(username)
         unfollowers = set(followings.values()) - set(followers.values())
-        return [{"username": unfollower.username, "nickname": unfollower.full_name, "link": f"https://www.instagram.com/{unfollower.username}" } for unfollower in unfollowers]
+        return [{"username": unfollower.username,
+                 "nickname": unfollower.full_name,
+                 "link": f"https://www.instagram.com/{unfollower.username}"
+                } for unfollower in unfollowers]
     
 def get_payments(duration: str):
     with read_only_session() as db:

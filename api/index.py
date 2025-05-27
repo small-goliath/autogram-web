@@ -34,6 +34,18 @@ async def search_groups():
 async def search_groups(username: str):
     if username is None or username == "":
         return []
+    # return [{"username": "aaa", "nickname": "bbb", "link": "ccc"},
+    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
+    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
+    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
+    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
+    #         {"username": "aaaaaaaaaaaaaaaaaa", "nickname": "bbbbbbbbbbbbbbbbb", "link": "ccc"},
+    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
+    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
+    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
+    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
+    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
+    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"}]
     try:
         unfollowers = core.get_unfollowers(username)
     except HTTPException as e:
@@ -67,6 +79,6 @@ async def delete_consumer(username: str):
 @app.get("/api/admin/payments")
 async def search_payment(duration: str):
     try:
-        return core.search_payments(duration)
+        return core.get_payments(duration)
     except HTTPException as e:
         return {"status": e.detail}

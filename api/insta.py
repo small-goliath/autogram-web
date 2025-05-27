@@ -16,7 +16,7 @@ user_id_map = {"gangggi_e_you": 5528659613,
                "jieunisong": 8528991616,
                "reumssi": 27883669,
                "_misogood": 5764911388,
-               "mina.c": 792696615,
+               "mina_.c": 792696615,
                "youngjoo_peach": 1805283700,
                "ssum_nam": 2982986712}
 
