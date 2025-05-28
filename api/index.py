@@ -34,18 +34,6 @@ async def search_groups():
 async def search_groups(username: str):
     if username is None or username == "":
         return []
-    # return [{"username": "aaa", "nickname": "bbb", "link": "ccc"},
-    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
-    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
-    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
-    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
-    #         {"username": "aaaaaaaaaaaaaaaaaa", "nickname": "bbbbbbbbbbbbbbbbb", "link": "ccc"},
-    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
-    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
-    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
-    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
-    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"},
-    #         {"username": "aaa", "nickname": "bbb", "link": "ccc"}]
     try:
         unfollowers = core.get_unfollowers(username)
     except HTTPException as e:

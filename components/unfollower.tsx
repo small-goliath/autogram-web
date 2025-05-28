@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 interface Unfollower {
   username: string;
-  nickname: string;
   link: string;
 }
 
@@ -70,7 +69,6 @@ export function Unfollowers() {
             {followers.map((unfollower, index) => (
               <tr key={index}>
                 <td>{unfollower.username}</td>
-                <td>{unfollower.nickname}</td>
                 <td>
                   <a href={unfollower.link} target='_blank' rel='noopener noreferrer'>
                     바로가기
