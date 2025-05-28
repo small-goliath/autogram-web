@@ -61,7 +61,6 @@ export function Unfollowers() {
           <thead>
             <tr>
               <th>계정</th>
-              <th>닉네임</th>
               <th>링크</th>
             </tr>
           </thead>
