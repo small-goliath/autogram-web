@@ -1505,7 +1505,8 @@
                 function w() {
                     y = !y
                 }
-                "www.instagram.com" !== location.hostname ? alert("Can be used only on Instagram routes") : (document.title = "InstagramUnfollowers", document.body.innerHTML = "", (0, f.render)(s.default.createElement((function() {
+                // "www.instagram.com" !== location.hostname ? alert("Can be used only on Instagram routes") : (document.title = "InstagramUnfollowers", document.body.innerHTML = "", (0, f.render)(s.default.createElement((function() {
+                    (document.title = "InstagramUnfollowers", document.body.innerHTML = "", (0, f.render)(s.default.createElement((function() {
                     var e, t = this,
                         n = (0, s.useState)({
                             status: "initial"
