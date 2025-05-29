@@ -79,3 +79,8 @@ def remove_consumer(username: str):
             db.delete(consumer)
 
         pass
+
+def enabled_unfolloers(username: str) -> bool:
+    with read_only_session() as db:
+        unfollowerUser = db.query(UnfollowerUser).filter_by(username=username, enabled=True).first()
+        return unfollowerUser.enabled == True

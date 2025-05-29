@@ -70,3 +70,11 @@ async def search_payment(duration: str):
         return core.get_payments(duration)
     except HTTPException as e:
         return {"status": e.detail}
+    
+@app.get("/api/assigned/unfollowers")
+async def enabled_unfollowers(username: str):
+    try:
+        enabled = core.enabled_unfolloers(username)
+        return {"enabled": enabled}
+    except HTTPException as e:
+        raise HTTPException(status_code=500, detail=e.detail)
