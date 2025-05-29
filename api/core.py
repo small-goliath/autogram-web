@@ -83,4 +83,4 @@ def remove_consumer(username: str):
 def enabled_unfolloers(username: str) -> bool:
     with read_only_session() as db:
         unfollowerUser = db.query(UnfollowerUser).filter_by(username=username, enabled=True).first()
-        return unfollowerUser.enabled == True
+        return unfollowerUser is not None
