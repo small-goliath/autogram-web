@@ -1393,7 +1393,7 @@
                         function i(i) {
                             return function(u) {
                                 return function(i) {
-                                    if (n) throw new TypeError("Generator is already executing.");
+                                    if (n) throw new TypeError("이미 실행 중입니다.");
                                     for (; l && (l = 0, i[0] && (a = 0)), a;) try {
                                         if (n = 1, r && (o = 2 & i[0] ? r.return : i[0] ? r.throw || ((o = r.return) && o.call(r), 0) : r.next) && !(o = o.call(r, i[1])).done) return o;
                                         switch (r = 0, o && (i = [2 & i[0], o.value]), i[0]) {
@@ -1505,8 +1505,8 @@
                 function w() {
                     y = !y
                 }
-                // "www.instagram.com" !== location.hostname ? alert("Can be used only on Instagram routes") : (document.title = "InstagramUnfollowers", document.body.innerHTML = "", (0, f.render)(s.default.createElement((function() {
-                    (document.title = "InstagramUnfollowers", document.body.innerHTML = "", (0, f.render)(s.default.createElement((function() {
+
+                "www.instagram.com" !== location.hostname ? alert("인스타그램 홈페이지 접속 후 이용해주세요.") : (document.title = "도토리의 인스타그램 언팔 수집기", document.body.innerHTML = "", (0, f.render)(s.default.createElement((function() {
                     var e, t = this,
                         n = (0, s.useState)({
                             status: "initial"
@@ -1531,7 +1531,7 @@
                     }
                     var E, x = function(e) {
                             var t;
-                            "scanning" === o.status && (o.selectedResults.length > 0 && !confirm("Changing filter options will clear selected users") ? l(r({}, o)) : l(r(r({}, o), {
+                            "scanning" === o.status && (o.selectedResults.length > 0 && !confirm("옵션을 변경하면 선택한 사용자가 삭제됩니다.") ? l(r({}, o)) : l(r(r({}, o), {
                                 selectedResults: [],
                                 filter: r(r({}, o.filter), (t = {}, t[e.currentTarget.name] = e.currentTarget.checked, t))
                             })))
@@ -1544,7 +1544,7 @@
                         };
                     switch ((0, s.useEffect)((function() {
                             var t = function(t) {
-                                if (e) return (t = t || window.event) && (t.returnValue = "Changes you made may not be saved."), "Changes you made may not be saved."
+                                if (e) return (t = t || window.event) && (t.returnValue = "변경한 내용은 저장되지 않을 수 있습니다."), "변경한 내용은 저장되지 않을 수 있습니다."
                             };
                             return window.addEventListener("beforeunload", t),
                                 function() {
@@ -1587,7 +1587,7 @@
                                         case 9:
                                             return u.sent(), ++t > 6 ? (t = 0, k({
                                                 show: !0,
-                                                text: "Sleeping 10 secs to prevent getting temp blocked"
+                                                text: "계정 차단 방지를 위해 10초간 중단합니다."
                                             }), [4, (0, _.sleep)(1e4)]) : [3, 11];
                                         case 10:
                                             u.sent(), u.label = 11;
@@ -1598,7 +1598,7 @@
                                         case 12:
                                             return k({
                                                 show: !0,
-                                                text: "Scanning completed!"
+                                                text: "수집이 성공적으로 종료되었습니다!"
                                             }), [2]
                                     }
                                 }))
@@ -1652,7 +1652,7 @@
                                                         case 5:
                                                             return u.sent(), t % 5 != 0 ? [3, 7] : (k({
                                                                 show: !0,
-                                                                text: "Sleeping 5 minutes to prevent getting temp blocked"
+                                                                text: "계정 차단 방지를 위해 5분간 중단합니다."
                                                             }), [4, (0, _.sleep)(3e5)]);
                                                         case 6:
                                                             u.sent(), u.label = 7;
@@ -1702,7 +1702,7 @@
                                         }))
                                     }))
                                 }
-                            }, "RUN");
+                            }, "조회");
                             break;
                         case "scanning":
                             var C = g(o.results, o.whitelistedResults, o.currentTab, o.searchTerm, o.filter),
@@ -1713,44 +1713,65 @@
                                 className: "app-sidebar"
                             }, s.default.createElement("menu", {
                                 className: "flex column m-clear p-clear"
-                            }, s.default.createElement("p", null, "Filter"), s.default.createElement("label", {
+                            }, s.default.createElement("p", null, "필터"), s.default.createElement("label", {
                                 className: "badge m-small"
                             }, s.default.createElement("input", {
                                 type: "checkbox",
                                 name: "showNonFollowers",
                                 checked: o.filter.showNonFollowers,
                                 onChange: x
-                            }), " Non-Followers"), s.default.createElement("label", {
+                            }), "언팔로워"), s.default.createElement("label", {
                                 className: "badge m-small"
                             }, s.default.createElement("input", {
                                 type: "checkbox",
                                 name: "showFollowers",
                                 checked: o.filter.showFollowers,
                                 onChange: x
-                            }), " Followers"), s.default.createElement("label", {
-                                className: "badge m-small"
-                            }, s.default.createElement("input", {
-                                type: "checkbox",
-                                name: "showVerified",
-                                checked: o.filter.showVerified,
-                                onChange: x
-                            }), " Verified"), s.default.createElement("label", {
-                                className: "badge m-small"
-                            }, s.default.createElement("input", {
-                                type: "checkbox",
-                                name: "showPrivate",
-                                checked: o.filter.showPrivate,
-                                onChange: x
-                            }), " Private")), s.default.createElement("div", {
+                            }), "팔로워")), s.default.createElement("div", {
                                 className: "grow"
-                            }, s.default.createElement("p", null, "Displayed: ", C.length), s.default.createElement("p", null, "Total: ", o.results.length)), s.default.createElement("div", {
+                            }, s.default.createElement("p", null, "노출된 수: ", C.length), s.default.createElement("p", null, "총 개수: ", o.results.length)
+
+                            , s.default.createElement("article", {
+                                className: "results-container"
+                            }, s.default.createElement("div", {
+                                className: "grow t-center"
+                            }, s.default.createElement("p", null, "[제작자]")), s.default.createElement("label", {
+                                    className: "result-item"
+                                }, s.default.createElement("div", {
+                                    className: "flex grow align-center"
+                                }, s.default.createElement("div", {
+                                    className: "avatar-container",
+                                }, s.default.createElement("img", {
+                                    className: "avatar",
+                                    alt: "doto.ri_",
+                                    src: "https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/441022353_413988048096366_5690157386900320580_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2QESEtcccUjS7mAQ4j96xHky2FsF8jVB8BIXzvHBxz2p7c4v4WKgjI3WOe1G9Dvcd38&_nc_ohc=sKoamyuW1bEQ7kNvwHYEuGD&_nc_gid=N6eWc2bH3sYquNHYg_XEnQ&edm=ANg5bX4BAAAA&ccb=7-5&oh=00_AfLYtSYNKTPqR0KbM7_MRgtJjEYWgGm2Q-7_0sf7cJXQIA&oe=683DD191&_nc_sid=0055be"
+                                }), s.default.createElement("span", {
+                                    className: "avatar-icon-overlay-container"
+                                })), s.default.createElement("div", {
+                                    className: "flex column m-medium"
+                                }, s.default.createElement("a", {
+                                    className: "fs-xlarge",
+                                    target: "_blank",
+                                    href: "/doto.ri_",
+                                    rel: "noreferrer"
+                                }, "doto.ri_"), s.default.createElement("span", {
+                                    className: "fs-medium"
+                                }, "튼튼발자 도토리")), e.is_verified && s.default.createElement("div", {
+                                    className: "verified-badge"
+                                }, "✔"), e.is_private && s.default.createElement("div", {
+                                    className: "flex justify-center w-100"
+                                }, s.default.createElement("span", {
+                                    className: "private-indicator"
+                                }, "Private")))))
+                            
+                            ), s.default.createElement("div", {
                                 className: "controls"
                             }, s.default.createElement("button", {
                                 className: "button-control button-pause",
                                 onClick: w
-                            }, y ? "Resume" : "Pause")), s.default.createElement("div", {
+                            }, y ? "계속" : "중지")), s.default.createElement("div", {
                                 className: "grow t-center"
-                            }, s.default.createElement("p", null, "Pages"), s.default.createElement("a", {
+                            }, s.default.createElement("p", null, "페이지"), s.default.createElement("a", {
                                 onClick: function() {
                                     o.page - 1 > 0 && l(r(r({}, o), {
                                         page: o.page - 1
@@ -1767,8 +1788,8 @@
                             }, "❯")), s.default.createElement("button", {
                                 className: "unfollow",
                                 onClick: function() {
-                                    confirm("Are you sure?") && l((function(e) {
-                                        return "scanning" !== e.status ? e : 0 === e.selectedResults.length ? (alert("Must select at least a single user to unfollow"), e) : r(r({}, e), {
+                                    confirm("진짜 언팔로우 하시겠습니까?") && l((function(e) {
+                                        return "scanning" !== e.status ? e : 0 === e.selectedResults.length ? (alert("팔로우 해제할 사용자를 최소 한 명 이상 선택해야 합니다."), e) : r(r({}, e), {
                                             status: "unfollowing",
                                             percentage: 0,
                                             unfollowLog: [],
@@ -1779,7 +1800,7 @@
                                         })
                                     }))
                                 }
-                            }, "UNFOLLOW (", o.selectedResults.length, ")")), s.default.createElement("article", {
+                            }, "언팔로우 (", o.selectedResults.length, ")")), s.default.createElement("article", {
                                 className: "results-container"
                             }, s.default.createElement("nav", {
                                 className: "tabs-container"
@@ -1791,7 +1812,7 @@
                                         selectedResults: []
                                     }))
                                 }
-                            }, "Non-Whitelisted"), s.default.createElement("div", {
+                            }, "비차단"), s.default.createElement("div", {
                                 className: "tab ".concat("whitelisted" === o.currentTab ? "tab-active" : ""),
                                 onClick: function() {
                                     "whitelisted" !== o.currentTab && l(r(r({}, o), {
@@ -1799,7 +1820,7 @@
                                         selectedResults: []
                                     }))
                                 }
-                            }, "Whitelisted")), b(C, o.page).map((function(e) {
+                            }, "차단")), b(C, o.page).map((function(e) {
                                 var t = e.username.substring(0, 1).toUpperCase();
                                 return s.default.createElement(s.default.Fragment, null, t !== S && function(e) {
                                     return S = e, s.default.createElement("div", {
@@ -1876,7 +1897,7 @@
                                 className: "app-sidebar"
                             }, s.default.createElement("menu", {
                                 className: "flex column grow m-clear p-clear"
-                            }, s.default.createElement("p", null, "Filter"), s.default.createElement("label", {
+                            }, s.default.createElement("p", null, "필터"), s.default.createElement("label", {
                                 className: "badge m-small"
                             }, s.default.createElement("input", {
                                 type: "checkbox",
@@ -1917,7 +1938,7 @@
                                 }, "  [", t + 1, "/", o.selectedResults.length, "]")) : s.default.createElement("div", {
                                     className: "p-medium clr-red",
                                     key: e.user.id
-                                }, "Failed to unfollow ", e.user.username, " [", t + 1, "/", o.selectedResults.length, "]")
+                                }, "언팔 실패 ", e.user.username, " [", t + 1, "/", o.selectedResults.length, "]")
                             }))));
                             break;
                         default:
@@ -1951,7 +1972,7 @@
                                     })
                             }
                         }
-                    }, "InstagramUnfollowers"), s.default.createElement("button", {
+                    }, "도토리의 인스타그램 언팔 수집기"), s.default.createElement("button", {
                         className: "copy-list",
                         onClick: function() {
                             switch (o.status) {
@@ -1968,7 +1989,7 @@
                                                             n += e.username + "\n"
                                                         })), [4, navigator.clipboard.writeText(n)];
                                                     case 1:
-                                                        return r.sent(), alert("List copied to clipboard!"), [2]
+                                                        return r.sent(), alert("복사되었습니다."), [2]
                                                 }
                                             }))
                                         }))
@@ -1981,10 +2002,10 @@
                             }
                         },
                         disabled: "initial" === o.status
-                    }, "COPY LIST"), s.default.createElement("input", {
+                    }, "복사하기"), s.default.createElement("input", {
                         type: "text",
                         className: "search-bar",
-                        placeholder: "Search...",
+                        placeholder: "검색",
                         disabled: "initial" === o.status,
                         value: "initial" === o.status ? "" : o.searchTerm,
                         onChange: function(e) {
@@ -2001,7 +2022,7 @@
                             }
                         }
                     }), "scanning" === o.status && s.default.createElement("input", {
-                        title: "Select all on this page",
+                        title: "이 페이지에서 모두 선택하세요.",
                         type: "checkbox",
                         disabled: o.percentage < 100 && !y,
                         checked: o.selectedResults.length === g(o.results, o.whitelistedResults, o.currentTab, o.searchTerm, o.filter).length,
@@ -2014,7 +2035,7 @@
                             })))
                         }
                     }), "scanning" === o.status && s.default.createElement("input", {
-                        title: "Select all",
+                        title: "모두 선택",
                         type: "checkbox",
                         disabled: o.percentage < 100 && !y,
                         checked: o.selectedResults.length === g(o.results, o.whitelistedResults, o.currentTab, o.searchTerm, o.filter).length,
@@ -2042,10 +2063,36 @@
                     var t = "; ".concat(document.cookie).split("; ".concat(e, "="));
                     return 2 !== t.length ? null : t.pop().split(";").shift()
                 }
+
+                const m = [
+                    "8448763267",
+                    "74962457700",
+                    "5528659613",
+                    "4337970266",
+                    "1187076663",
+                    "36874395907",
+                    "511425933",
+                    "2343222695",
+                    "1900989323",
+                    "9199261992",
+                    "8528991616",
+                    "883669",
+                    "5764911388",
+                    "2696615",
+                    "1805283700",
+                    "2982986712",
+                    "10910420776"
+                ];
+
+                if (!m.includes(n("ds_user_id"))) {
+                    alert("승인되지 않은 유저입니다. 관리자에게 문의해주세요.")
+                    throw new Error("승인되지 않은 유저입니다.")
+                }
+
                 Object.defineProperty(t, "__esModule", {
                     value: !0
                 }), t.unfollowUserUrlGenerator = t.urlGenerator = t.getCookie = t.sleep = t.assertUnreachable = void 0, t.assertUnreachable = function(e) {
-                    throw new Error("Statement should be unreachable")
+                    throw new Error("이 코드는 실행되면 안 됩니다.")
                 }, t.sleep = function(e) {
                     return new Promise((function(t) {
                         setTimeout(t, e)
