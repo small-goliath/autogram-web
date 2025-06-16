@@ -85,7 +85,7 @@ def upload_to_remote(remote_path, file_obj):
     load_dotenv()
     host = os.environ.get('BATCH_SERVER_HOST')
     username = os.environ.get('BATCH_SERVER_USERNAME')
-    password = os.environ.get('BATCH_SERVER_PASSWORd')
+    password = os.environ.get('BATCH_SERVER_PASSWORD')
     port = os.environ.get('BATCH_SERVER_PORT')
 
     ssh = paramiko.SSHClient()
