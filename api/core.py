@@ -3,6 +3,7 @@ import os
 from typing import Any, Dict, List
 from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException
+import paramiko
 
 from api.database import read_only_session, transactional_session
 from api.insta import Insta
@@ -79,3 +80,19 @@ def remove_consumer(username: str):
             db.delete(consumer)
 
         pass
+
+def upload_to_remote(remote_path, file_obj):
+    load_dotenv()
+    host = os.environ.get('BATCH_SERVER_HOST')
+    username = os.environ.get('BATCH_SERVER_USERNAME')
+    password = os.environ.get('BATCH_SERVER_PASSWORd')
+    port = os.environ.get('BATCH_SERVER_PORT')
+
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(hostname=host, username=username, password=password, port=port)
+    sftp = ssh.open_sftp()
+    with sftp.open(remote_path, 'wb') as remote_file:
+        remote_file.write(file_obj.read())
+    sftp.close()
+    ssh.close()

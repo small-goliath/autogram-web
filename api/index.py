@@ -1,7 +1,10 @@
-from fastapi import FastAPI, HTTPException
+import io
+import os
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import api.core as core
 from api.model.payload import ConsumerCreate, GroupCreate, ProducerCreate
+from dotenv import load_dotenv
 
 app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
@@ -70,3 +73,15 @@ async def search_payment(duration: str):
         return core.get_payments(duration)
     except HTTPException as e:
         return {"status": e.detail}
+    
+@app.post("/api/admin/kakao-chats")
+async def update_kakao_chat_file(file: UploadFile = File(...)):
+    load_dotenv()
+    path = os.environ.get('KAKAOTALK_CHAT_FILE_PATH')
+    
+    try:
+        content = await file.read()
+        core.upload_to_remote(path, file_obj=io.BytesIO(content))
+    except Exception as e:
+        return {"status": e.detail}
+    return {"status": "ok"}
