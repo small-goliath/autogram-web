@@ -33,15 +33,14 @@ async def search_groups():
         return {"status": e.detail}
     return instagramGroups
 
-@app.get("/api/unfollowers")
-async def search_groups(username: str):
-    if username is None or username == "":
-        return []
+@app.get("/api/sns-raise/verifications")
+async def search_sns_raise_verifications():
     try:
-        unfollowers = core.get_unfollowers(username)
-    except HTTPException as e:
+        return core.search_sns_raise_verifications()
+    except Exception as e:
         return {"status": e.detail}
-    return unfollowers
+
+# admin
 
 @app.post("/api/admin/groups")
 async def setting_group(groupCreate: GroupCreate):
@@ -85,3 +84,4 @@ async def update_kakao_chat_file(file: UploadFile = File(...)):
     except Exception as e:
         return {"status": e.detail}
     return {"status": "ok"}
+    

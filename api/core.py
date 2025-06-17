@@ -7,7 +7,7 @@ import paramiko
 
 from api.database import read_only_session, transactional_session
 from api.insta import Insta
-from api.model.entity import Consumer, InstagramGroup, Payment, Producer, Unfollower, UnfollowerUser
+from api.model.entity import Consumer, InstagramGroup, Payment, Producer, UserActionVerification
 from api.model.payload import ConsumerCreate, InstagramAccount, ProducerCreate
 from dotenv import load_dotenv
 
@@ -18,15 +18,6 @@ def get_groups() -> List[Dict[str, Any]]:
     with read_only_session() as db:
         instagramGroups = db.query(InstagramGroup).all()
         return [{"id": group.id, "type": group.type} for group in instagramGroups]
-    
-def get_unfollowers(username: str) -> List[Dict[str, Any]]:
-    with read_only_session() as db:
-        unfollowerUser = db.query(UnfollowerUser).filter_by(username=username).first()
-        unfollowers = db.query(Unfollower).filter_by(target_user_id=unfollowerUser.id).all()
-
-        return [{"username": unfollower.username,
-                 "link": f"https://www.instagram.com/{unfollower.username}"
-                } for unfollower in unfollowers]
     
 def get_payments(duration: str):
     with read_only_session() as db:
@@ -74,7 +65,7 @@ def create_consumer(consumerCreate: ConsumerCreate):
 
 def remove_consumer(username: str):
     with transactional_session() as db:
-        consumer = db.query(Consumer).filter(Consumer.username == username).first()
+        consumer = db.query(Consumer).filter(username == username).first()
         
         if consumer:
             db.delete(consumer)
@@ -96,3 +87,9 @@ def upload_to_remote(remote_path, file_obj):
         remote_file.write(file_obj.read())
     sftp.close()
     ssh.close()
+
+def search_sns_raise_verifications():
+    with read_only_session() as db:
+        userActionVerifications = db.query(UserActionVerification).all()
+
+        return [{"username": userActionVerification.username, "link": userActionVerification.link} for userActionVerification in userActionVerifications]
