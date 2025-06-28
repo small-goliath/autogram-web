@@ -1,13 +1,10 @@
-import io
-import os
 from typing import List
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import api.core as core
 from api.model.model import ActionVerification, Group
 from api.model.payload import ConsumerCreate, GroupCreate, ProducerCreate
-from dotenv import load_dotenv
 
 app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
