@@ -1,9 +1,7 @@
 import json
 from typing import Dict
 from instagrapi import Client
-from instagrapi.types import UserShort
-from api.model.entity import Producer
-from api.model.payload import InstagramAccount, ProducerCreate
+from api.model.payload import InstagramAccount
 
 class Insta():
     def __init__(self, account: InstagramAccount):

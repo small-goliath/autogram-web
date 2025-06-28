@@ -33,6 +33,12 @@ class Payment(Base):
     count = Column(Integer, default=0)
     year_month = Column(String(10), index=True)
 
+class SNSRaiseUser(Base):
+    __tablename__ = "sns_raise_user"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(32), nullable=True)
+
 class UserActionVerification(Base):
     __tablename__ = "user_action_verification"
 

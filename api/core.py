@@ -8,16 +8,17 @@ import paramiko
 from api.database import read_only_session, transactional_session
 from api.insta import Insta
 from api.model.entity import Consumer, InstagramGroup, Payment, Producer, UserActionVerification
+from api.model.model import ActionVerification, Group
 from api.model.payload import ConsumerCreate, InstagramAccount, ProducerCreate
 from dotenv import load_dotenv
 
 load_dotenv()
 PRICE_BY_ACTION = int(os.environ.get('PRICE_BY_ACTION'))
 
-def get_groups() -> List[Dict[str, Any]]:
+def get_groups() -> List[Group]:
     with read_only_session() as db:
         instagramGroups = db.query(InstagramGroup).all()
-        return [{"id": group.id, "type": group.type} for group in instagramGroups]
+        return [Group(id=group.id, type=group.type) for group in instagramGroups]
     
 def get_payments(duration: str):
     with read_only_session() as db:
@@ -88,8 +89,8 @@ def upload_to_remote(remote_path, file_obj):
     sftp.close()
     ssh.close()
 
-def search_sns_raise_verifications():
+def search_sns_raise_verifications() -> List[ActionVerification]:
     with read_only_session() as db:
         userActionVerifications = db.query(UserActionVerification).all()
 
-        return [{"username": userActionVerification.username, "link": userActionVerification.link} for userActionVerification in userActionVerifications]
+        return [ActionVerification(username=userActionVerification.username, link=userActionVerification.link) for userActionVerification in userActionVerifications]

@@ -14,7 +14,6 @@ export function Register() {
     groupId: '',
   });
   const [type, setType] = useState('');
-  const [kakaoChatFile, setKakaoChatFile] = useState<File | null>(null);
   const [remvedConsumer, setRemovedConsumer] = useState('');
   const [groups, setGroups] = useState<Group[]>([]);
   const [error, setError] = useState('');
@@ -37,12 +36,6 @@ export function Register() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setCreateConsumerFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleKakaoChatFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setKakaoChatFile(e.target.files[0]);
-    }
   };
 
   const handleGroupSubmit = async (event: React.FormEvent) => {
@@ -95,32 +88,6 @@ export function Register() {
 
       console.log(response.data.status);
       alert("설정 되었습니다.");
-    } catch (error) {
-      alert("설정 되지 않았습니다.");
-      console.error('설정 실패:', error);
-    }
-  };
-
-  const handleKakaoCharFileRemoveSubmit = async (event: React.FormEvent) => {
-    try {
-      event.preventDefault();
-      if (!kakaoChatFile) {
-        alert("파일을 선택해 주세요.");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('file', kakaoChatFile);
-
-      const response = await axios.post('/api/admin/kakao-chats', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      console.log(response.data.status);
-      alert("설정 되었습니다.");
-      setKakaoChatFile(null);
     } catch (error) {
       alert("설정 되지 않았습니다.");
       console.error('설정 실패:', error);
@@ -182,22 +149,6 @@ export function Register() {
             value={remvedConsumer}
             onChange={(e) => setRemovedConsumer(e.target.value)}
             placeholder="삭제할 받는 사람의 인스타그램 계정"
-          />
-        </div>
-        <button type="submit">설정하기</button>
-      </form>
-
-
-      <hr />
-
-      <form onSubmit={handleKakaoCharFileRemoveSubmit}>
-        <div className="form-group">
-          <label>카카오톡 채팅방 내용 최신화</label>
-          <input
-            type="file"
-            accept=".txt"
-            onChange={handleKakaoChatFileChange}
-            placeholder="윈도우PC에서 채팅방 내용 내보내기한 파일"
           />
         </div>
         <button type="submit">설정하기</button>
