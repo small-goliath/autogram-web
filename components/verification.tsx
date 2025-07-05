@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 interface Verification {
   username: string;
@@ -28,9 +29,8 @@ export function Verification() {
 
   const fetchVerifications = async () => {
     try {
-      const response = await fetch(`/api/sns-raise/verifications`);
-      const result = await response.json();
-      setVerifications(result);
+      const response = await axios.get(`/api/sns-raise/verifications`);
+      setVerifications(response.data);
     } catch {
       setError('품앗이 검증 조회 실패했습니다.');
     }
@@ -49,7 +49,7 @@ export function Verification() {
   const grouped = groupByUsername(filtered);
 
   return (
-    <div className="container" style={{ fontFamily: 'Arial, sans-serif', maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
+    <div className="container verification-container">
       <h1>사용자별 품앗이하지 않은 링크</h1>
 
       <input
@@ -57,32 +57,23 @@ export function Verification() {
         value={username}
         placeholder="username 입력"
         onChange={(e) => setUsername(e.target.value)}
-        style={{ marginBottom: 16, padding: 8 }}
+        className="verification-input"
       />
 
       {error ? (
-        <p style={{ color: 'red' }}>{error}</p>
+        <p className="error-message">{error}</p>
       ) : grouped.length === 0 ? (
-        <p style={{ color: 'blue' }}>좋아요! 모두 다 잘 하고 있으시네요!</p>
+        <p className="info-message">좋아요! 모두 다 잘 하고 있으시네요!</p>
       ) : (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {grouped.map(({ username, links }, idx) => (
-            <li
-              key={username}
-              style={{
-                background: '#f9f9f9',
-                margin: '10px 0',
-                padding: '10px',
-                borderRadius: '5px',
-                boxShadow: '0 0 5px rgba(0,0,0,0.1)'
-              }}>
-              <span style={{ fontWeight: 'bold' }}>{username}</span>
-              <ul style={{ padding: 0, marginTop: 8, marginBottom: 0 }}>
+        <ul className="verification-list">
+          {grouped.map(({ username, links }) => (
+            <li key={username} className="verification-item">
+              <span className="username">{username}</span>
+              <ul className="link-list">
                 {links.map((link, linkIdx) => (
-                  <li key={linkIdx} style={{ display: 'inline-block', margin: '0 8px' }}>
+                  <li key={linkIdx} className="link-item">
                     <a
                       href={String(link)}
-                      style={{ color: '#555' }}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

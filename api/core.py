@@ -3,7 +3,7 @@ import os
 from typing import List
 from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException
-import paramiko
+from instagrapi.exceptions import BadPassword, TwoFactorRequired
 
 from api.database import read_only_session, transactional_session
 from api.insta import Insta
@@ -29,7 +29,7 @@ def create_producer(account: ProducerCreate):
     with transactional_session() as db:
         db_account = db.query(Producer).filter(Producer.username == account.username).first()
         if db_account:
-            raise HTTPException(status_code=400, detail="이미 등록되어 있습니다.")
+            raise HTTPException(status_code=409, detail="이미 등록되어 있습니다.")
         
         try:
             instagramAccount = InstagramAccount(username=account.username,
@@ -38,8 +38,11 @@ def create_producer(account: ProducerCreate):
                                                 group_id=account.group_id)
             insta = Insta(instagramAccount)
             session = insta.login_with_password()
+        except (BadPassword, TwoFactorRequired) as e:
+            raise HTTPException(status_code=401, detail=f"로그인 실패: {e}")
         except Exception as e:
-            raise HTTPException(status_code=400, detail="로그인할 수 없습니다.")
+            raise HTTPException(status_code=500, detail=f"내부 서버 오류: {e}")
+
         new_account = Producer(username=account.username, session=json.dumps(session), group_id=account.group_id)
         db.add(new_account)
         pass
@@ -72,22 +75,6 @@ def remove_consumer(username: str):
             db.delete(consumer)
 
         pass
-
-def upload_to_remote(remote_path, file_obj):
-    load_dotenv()
-    host = os.environ.get('BATCH_SERVER_HOST')
-    username = os.environ.get('BATCH_SERVER_USERNAME')
-    password = os.environ.get('BATCH_SERVER_PASSWORD')
-    port = os.environ.get('BATCH_SERVER_PORT')
-
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(hostname=host, username=username, password=password, port=port)
-    sftp = ssh.open_sftp()
-    with sftp.open(remote_path, 'wb') as remote_file:
-        remote_file.write(file_obj.read())
-    sftp.close()
-    ssh.close()
 
 def search_sns_raise_verifications() -> List[ActionVerification]:
     with read_only_session() as db:

@@ -1,3 +1,4 @@
+.venv
 .vscode/
 session.json
 insta_session/*.json
